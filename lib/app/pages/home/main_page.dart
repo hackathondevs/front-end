@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:hackfest/app/pages/home/home_page.dart';
-import 'package:hackfest/app/pages/kbs/kbs_maps_page.dart';
-import 'package:hackfest/app/pages/point/point_page.dart';
-import 'package:hackfest/app/pages/profile/profile_page.dart';
+import 'package:zooventure/app/pages/home/home_page.dart';
+import 'package:zooventure/app/pages/kbs/kbs_maps_page.dart';
+import 'package:zooventure/app/pages/point/point_page.dart';
+import 'package:zooventure/app/pages/profile/profile_page.dart';
 
 class MainPage extends StatefulWidget {
   MainPage({super.key});
@@ -42,6 +42,14 @@ class _MainPageState extends State<MainPage> {
     PointPage(),
     ProfilePage(),
   ];
+
+  final List<String> _labels = [
+    'Home',
+    'KBS Maps',
+    'Point',
+    'Profile',
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

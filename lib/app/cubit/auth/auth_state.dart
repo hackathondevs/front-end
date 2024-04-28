@@ -20,3 +20,9 @@ final class Authenticated extends AuthState {}
 final class Unauthenticated extends AuthState {}
 
 final class LoggingOut extends AuthState {}
+
+final class GetUserData extends AuthState {
+  final List<User> listUser;
+
+  GetUserData({required this.listUser});
+}

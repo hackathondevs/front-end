@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
-import 'package:hackfest/data/repositories/auth_repositories.dart';
 import 'package:meta/meta.dart';
+import 'package:zooventure/data/models/user.dart';
+import 'package:zooventure/data/repositories/auth_repositories.dart';
 
 part 'auth_state.dart';
 
@@ -41,6 +42,19 @@ class AuthCubit extends Cubit<AuthState> {
       }
     } catch (e) {
       emit(AuthError("There is an error: ${e.toString()}"));
+    }
+  }
+
+  void getDataUser() async {
+    try {
+      emit(AuthLoading());
+      final response = await _authRepository.getUserDataRepository();
+
+      response != null
+          ? emit(GetUserData(listUser: response))
+          : emit(AuthError("Gagal mengambil data"));
+    } catch (e) {
+      emit(AuthError("error: $e"));
     }
   }
 

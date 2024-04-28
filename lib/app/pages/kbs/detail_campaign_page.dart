@@ -3,9 +3,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:hackfest/app/routes/route_name.dart';
-import 'package:hackfest/app/widgets/large_buttons.dart';
-import 'package:hackfest/app/widgets/text_fields.dart';
+import 'package:zooventure/app/routes/route_name.dart';
+import 'package:zooventure/app/widgets/large_buttons.dart';
+import 'package:zooventure/app/widgets/text_fields.dart';
 
 class DetailCampaignPage extends StatefulWidget {
   const DetailCampaignPage({super.key});

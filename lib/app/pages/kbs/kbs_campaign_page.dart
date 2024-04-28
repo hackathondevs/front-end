@@ -1,10 +1,16 @@
+import 'dart:io';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:hackfest/app/pages/kbs/detail_campaign_page.dart';
-import 'package:hackfest/app/routes/route_name.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:zooventure/app/pages/kbs/success_report_page.dart';
+import 'package:zooventure/app/routes/route_name.dart';
+import 'package:zooventure/app/widgets/large_buttons.dart';
+import 'package:zooventure/app/widgets/text_fields.dart';
+import 'package:zooventure/data/datasources/local/local_storage.dart';
 
 class KBSCampaignPage extends StatefulWidget {
   const KBSCampaignPage({super.key});
@@ -12,6 +18,13 @@ class KBSCampaignPage extends StatefulWidget {
   @override
   State<KBSCampaignPage> createState() => _KBSCampaignPageState();
 }
+
+File? _selectedImages;
+File? _selectedImagesFromGallery;
+
+TextEditingController timeIncidentController = TextEditingController();
+TextEditingController locationIncidentController = TextEditingController();
+TextEditingController descriptionController = TextEditingController();
 
 class _KBSCampaignPageState extends State<KBSCampaignPage> {
   @override
@@ -38,7 +51,7 @@ class _KBSCampaignPageState extends State<KBSCampaignPage> {
                 width: 8.w,
               ),
               Text(
-                "KBS Campaign",
+                "Zoo Report",
                 style: GoogleFonts.nunito(
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
@@ -49,130 +62,199 @@ class _KBSCampaignPageState extends State<KBSCampaignPage> {
           SizedBox(
             height: 32.h,
           ),
-          Padding(
-              padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 6.h),
-              child: SearchAnchor(
-                  builder: (BuildContext context, SearchController controller) {
-                return SearchBar(
-                  controller: controller,
-                  shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8))),
-                  padding: MaterialStatePropertyAll<EdgeInsets>(
-                      EdgeInsets.symmetric(horizontal: 16.w)),
-                  backgroundColor:
-                      MaterialStatePropertyAll<Color>(Color(0xFFF8F8F8)),
-                  hintText: "Cari di KBS...",
-                  hintStyle: MaterialStatePropertyAll<TextStyle>(TextStyle(
-                      fontSize: 14.sp,
-                      fontWeight: FontWeight.w400,
-                      color: Color(0xFF6D6E8C))),
-                  onTap: () {
-                    controller.openView();
-                  },
-                  onChanged: (_) {
-                    controller.openView();
-                  },
-                  leading: const Icon(
-                    Icons.search,
-                    color: Color(0xFF6D6E8C),
-                  ),
-                );
-              }, suggestionsBuilder:
-                      (BuildContext context, SearchController controller) {
-                return List<ListTile>.generate(5, (int index) {
-                  final String item = 'item $index';
-                  return ListTile(
-                    title: Text(item),
-                    onTap: () {
-                      setState(() {
-                        controller.closeView(item);
-                      });
-                    },
-                  );
-                });
-              })),
-          SizedBox(
-            height: 16.h,
+          Image.asset(
+            "assets/zoo_report_img.png",
+            height: 169.h,
+            width: 160.w,
           ),
-          InkWell(
-            onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (_) => const DetailCampaignPage()));
-            },
-            child: Container(
-              height: 206.h,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.all(Radius.circular(8.w)),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.25),
-                    spreadRadius: 1,
-                    blurRadius: 2,
-                    offset: const Offset(0, 2),
+          Text(
+            "Laporkan Pelanggaran",
+            style: GoogleFonts.nunito(
+                fontSize: 20.sp,
+                fontWeight: FontWeight.w600,
+                color: Color(0xFF1A1D3E)),
+          ),
+          SizedBox(
+            height: 28.h,
+          ),
+          const Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [Text("Tulis Waktu Kejadian (contoh: 14:30)")],
+          ),
+          CustomTextField(
+              controller: timeIncidentController,
+              type: CustomTextFieldType.input,
+              hintText: "Tulis Waktu Kejadian"),
+          SizedBox(
+            height: 8.h,
+          ),
+          const Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Text("Tulis Lokasi Kejadian (contoh: Sebelah Kandang Singa)")
+            ],
+          ),
+          CustomTextField(
+              controller: timeIncidentController,
+              type: CustomTextFieldType.input,
+              hintText: "Tulis Lokasi Kejadian"),
+          SizedBox(
+            height: 8.h,
+          ),
+          const Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [Text("Deskripsi Kejadian")],
+          ),
+          CustomTextField(
+              controller: timeIncidentController,
+              type: CustomTextFieldType.input,
+              hintText: "Tulis Deskripsi"),
+          SizedBox(
+            height: 8.h,
+          ),
+          ElevatedButton(
+              style: ButtonStyle(
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
                   ),
-                ],
+                ),
+                backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
+                minimumSize: MaterialStateProperty.all<Size>(
+                  Size(382.sp, 40.sp),
+                ),
+                side: MaterialStateProperty.all<BorderSide>(
+                  BorderSide(
+                    color: Color(0xFF5EB151),
+                    width: 1.0,
+                  ),
+                ),
               ),
-              child: Column(
+              onPressed: () {
+                _insertFromGalery();
+              },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(8.w),
-                        topRight: Radius.circular(8.w)),
-                    child: Image.asset(
-                      "assets/vid_kbs.png",
-                      fit: BoxFit.fill,
-                      width: MediaQuery.of(context).size.width,
-                      height: 170.h,
-                    ),
-                  ),
-                  Padding(
-                    padding:
-                        EdgeInsets.only(top: 13.h, left: 11.w, right: 11.w),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "Buang Sampah Plastik di Tong Kuning",
-                          style: GoogleFonts.nunito(
-                            fontSize: 12.sp,
-                            fontWeight: FontWeight.w500,
-                            color: Color(0xFF1A1D3E),
-                          ),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            SvgPicture.asset(
-                              "assets/icons/coin.svg",
-                              width: 12.w,
-                              height: 12.h,
-                            ),
-                            SizedBox(
-                              height: 4.w,
-                            ),
-                            Text(
-                              "100 ZP",
-                              style: GoogleFonts.nunito(
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.w600,
-                                  color: Color(0xFF6D6E8C)),
-                            )
-                          ],
-                        )
-                      ],
-                    ),
-                  ),
+                  Text(
+                    "Upload Gambar",
+                    style: GoogleFonts.nunito(
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.w700,
+                        color: Color(0xFF263238)),
+                  )
                 ],
+              )),
+          SizedBox(
+            height: 8.h,
+          ),
+          ElevatedButton(
+            style: ButtonStyle(
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+              backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
+              minimumSize: MaterialStateProperty.all<Size>(
+                Size(382.sp, 40.sp),
+              ),
+              side: MaterialStateProperty.all<BorderSide>(
+                const BorderSide(
+                  color: Color(0xFF5EB151),
+                  width: 1.0,
+                ),
               ),
             ),
+            onPressed: () {
+              _capture();
+            },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "Foto Langsung",
+                  style: GoogleFonts.nunito(
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.w700,
+                      color: Color(0xFF263238)),
+                )
+              ],
+            ),
           ),
+          const Spacer(),
+          LargeButton(text: "Laporkan", onClicked: () {}),
+          SizedBox(
+            height: 32.h,
+          )
         ],
       ),
     ));
+  }
+
+  Future<String?> _init() async {
+    String? token = await LocalStorage.getUserToken();
+    return token;
+  }
+
+  Future<void> _capture() async {
+    final Dio dio = Dio();
+    String? userToken = await _init();
+    final image = await ImagePicker().pickImage(source: ImageSource.camera);
+    if (image == null) return;
+
+    _selectedImages = File(image.path);
+
+    FormData formData =
+        FormData.fromMap({"picture": await MultipartFile.fromFile(image.path)});
+    try {
+      final response = await dio.post(
+        "https://hackfest.miruza.my.id/api/reports",
+        data: formData,
+        options: Options(headers: {"Authorization": "Bearer $userToken"}),
+      );
+
+      if (response.statusCode == 200) {
+        print("ini hasil response");
+        print(response.data);
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (_) => SuccessReportPage()));
+      } else {
+        print(
+            'gagal kirim gambar ke backend. code status: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('terjadi kesalahan: $e');
+    }
+  }
+
+  Future<void> _insertFromGalery() async {
+    final Dio dio = Dio();
+    String? userToken = await _init();
+    final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (image == null) return;
+
+    _selectedImages = File(image.path);
+
+    FormData formData =
+        FormData.fromMap({"picture": await MultipartFile.fromFile(image.path)});
+    try {
+      final response = await dio.post(
+        "https://hackfest.miruza.my.id/api/reports",
+        data: formData,
+        options: Options(headers: {"Authorization": "Bearer $userToken"}),
+      );
+
+      if (response.statusCode == 200) {
+        Navigator.of(context).push(
+          MaterialPageRoute(builder: (_) => SuccessReportPage()),
+        );
+      } else {
+        print(
+            'gagal kirim gambar ke backend. code status: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('terjadi kesalahan: $e');
+    }
   }
 }

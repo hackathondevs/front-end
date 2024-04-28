@@ -1,9 +1,11 @@
 import 'package:dio/dio.dart';
-import 'package:hackfest/data/datasources/local/local_storage.dart';
-import 'package:hackfest/data/datasources/remote/api.dart';
+import 'package:zooventure/data/datasources/local/local_storage.dart';
+import 'package:zooventure/data/datasources/remote/api.dart';
+import 'package:zooventure/data/models/user.dart';
 
 class AuthRepository {
   final Dio _dio = Dio();
+  List<User> listUserModel = [];
 
   Future<bool> signupRepository(String name, String email, String password,
       String passwordConfirmation) async {
@@ -47,5 +49,22 @@ class AuthRepository {
       throw Exception("Error at login repository ${e.toString()}");
     }
     return false;
+  }
+
+  Future<List<User>?> getUserDataRepository() async {
+    try {
+      var response = await _dio.get(Api.getUserDataEndpoint());
+
+      if (response.statusCode == 200) {
+        for (var data in (response.data as List<dynamic>)) {
+          User userModel = User.fromJson(data);
+          listUserModel.add(userModel);
+        }
+      }
+      print(listUserModel);
+      return listUserModel;
+    } catch (e) {
+      throw Exception('ada error di getUserData ${e.toString()}');
+    }
   }
 }

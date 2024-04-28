@@ -4,7 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:hackfest/app/routes/route_name.dart';
+import 'package:zooventure/app/routes/route_name.dart';
 
 class OnboardingPage extends StatefulWidget {
   const OnboardingPage({super.key});
@@ -56,7 +56,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
           child: Column(
             children: [
               Expanded(
-                flex: 3,
+                flex: 8,
                 child: PageView.builder(
                   controller: _pageController,
                   onPageChanged: (value) {
@@ -80,6 +80,9 @@ class _OnboardingPageState extends State<OnboardingPage> {
                   (index) => buildDots(index),
                 ).toList(),
               ),
+              const SizedBox(
+                height: 50,
+              )
             ],
           ),
         ),

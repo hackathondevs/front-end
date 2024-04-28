@@ -11,9 +11,7 @@ class LocalStorage {
   static Future<String?> getUserToken() async {
     final prefs = await SharedPreferences.getInstance();
     final userToken = prefs.getString(_userKey);
-    print("INI DATA TOKEN: $userToken");
     if (userToken != null && userToken.isNotEmpty == true) {
-      print("INI berjalan");
       return userToken;
     }
     return null;

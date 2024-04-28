@@ -6,10 +6,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:hackfest/app/pages/kbs/detail_info_animal_page.dart';
-import 'package:hackfest/app/routes/route_name.dart';
-import 'package:hackfest/app/widgets/large_buttons.dart';
-import 'package:hackfest/data/datasources/local/local_storage.dart';
+import 'package:zooventure/app/pages/kbs/detail_info_animal_page.dart';
+import 'package:zooventure/app/routes/route_name.dart';
+import 'package:zooventure/app/widgets/large_buttons.dart';
+import 'package:zooventure/data/datasources/local/local_storage.dart';
 import 'package:image_picker/image_picker.dart';
 
 class CamnimalBoardPage extends StatefulWidget {
@@ -97,7 +97,7 @@ class _CamnimalBoardPageState extends State<CamnimalBoardPage> {
                     Size(382.sp, 40.sp),
                   ),
                   side: MaterialStateProperty.all<BorderSide>(
-                    BorderSide(
+                    const BorderSide(
                       color: Color(0xFFCFCFCF),
                       width: 1.0,
                     ),
@@ -127,9 +127,6 @@ class _CamnimalBoardPageState extends State<CamnimalBoardPage> {
             SizedBox(
               height: 16.h,
             ),
-            _selectedImages != null
-                ? Image.file(_selectedImages!)
-                : const Text("Tolong tangkap gambar terlebih dahulu")
           ],
         ),
       ),

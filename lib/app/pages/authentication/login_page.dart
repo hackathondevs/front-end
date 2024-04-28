@@ -4,13 +4,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:hackfest/app/cubit/auth/auth_cubit.dart';
-import 'package:hackfest/app/pages/home/main_page.dart';
-import 'package:hackfest/app/routes/route_name.dart';
-import 'package:hackfest/app/widgets/large_buttons.dart';
-import 'package:hackfest/app/widgets/loading.dart';
-import 'package:hackfest/app/widgets/snackbar.dart';
-import 'package:hackfest/app/widgets/text_fields.dart';
+import 'package:zooventure/app/cubit/auth/auth_cubit.dart';
+import 'package:zooventure/app/pages/home/main_page.dart';
+import 'package:zooventure/app/routes/route_name.dart';
+import 'package:zooventure/app/widgets/large_buttons.dart';
+import 'package:zooventure/app/widgets/loading.dart';
+import 'package:zooventure/app/widgets/snackbar.dart';
+import 'package:zooventure/app/widgets/text_fields.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -196,13 +196,6 @@ class _LoginPageState extends State<LoginPage> {
                       ],
                     ),
                   ),
-                  InkWell(
-                    onTap: () {
-                      Navigator.of(context)
-                          .push(MaterialPageRoute(builder: (_) => MainPage()));
-                    },
-                    child: Text("ke main Page"),
-                  )
                 ],
               ),
             ),
