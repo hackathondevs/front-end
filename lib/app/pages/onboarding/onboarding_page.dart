@@ -19,12 +19,12 @@ class _OnboardingPageState extends State<OnboardingPage> {
   List<Map<String, String>> onboardingData = [
     {
       "image": "assets/onboarding/1.png",
-      "title": "Pahami Lingkunganmu",
-      "content": "Ayo mulai lestarikan lingkungan sekitarmu",
+      "title": "Rasakan Petualangan",
+      "content": "Ayo mulai berpetualang bersama Zooventure",
     },
     {
       "image": "assets/onboarding/2.png",
-      "title": "Jaga lingkunganmu",
+      "title": "Jaga lingkungan dan satwa",
       "content": "Berikan perhatian yang terhadap keberlanjutan lingkunganmu",
     },
     {
